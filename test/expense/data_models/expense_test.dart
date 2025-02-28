@@ -1,12 +1,10 @@
 import 'package:expense_tracker/expense/data_models/expense.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../expense_test_factory.dart';
+
 void main() {
-  final expenseWithoutCategory = Expense(
-    createdAt: DateTime(2025, 2, 28, 20, 38),
-    amount: 42.42,
-    description: 'description',
-  );
+  final expenseWithoutCategory = ExpenseTestFactory.expenseWithoutCategory;
 
   group('get category from db', () {
     test('get correct category if dbCategory is not null', () async {

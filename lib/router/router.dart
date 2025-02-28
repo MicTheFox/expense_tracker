@@ -1,5 +1,9 @@
-import 'package:expense_tracker/router/routeNames.dart';
+import 'package:expense_tracker/expense/repository/expense_repository.dart';
+import 'package:expense_tracker/expense/state/expense_cubit.dart';
+import 'package:expense_tracker/expense/widgets/add_expense_page.dart';
+import 'package:expense_tracker/router/route_names.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
@@ -12,7 +16,7 @@ final GoRouter router = GoRouter(
             GoRoute(
               name: RouteNames.addExpenseRouteName,
               path: '/add-expense',
-              builder: (_, __) => const Placeholder(),
+              builder: (_, __) => const AddExpensePage(),
             ),
           ],
         ),
@@ -27,8 +31,12 @@ final GoRouter router = GoRouter(
         ),
       ],
       builder:
-          (context, state, navigationShell) =>
-              _Shell(navigationShell: navigationShell),
+          (context, state, navigationShell) => BlocProvider(
+            create:
+                (context) =>
+                    ExpenseCubit(expenseRepository: ExpenseRepository()),
+            child: _Shell(navigationShell: navigationShell),
+          ),
     ),
   ],
 );
