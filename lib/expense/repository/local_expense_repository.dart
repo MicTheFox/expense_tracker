@@ -20,6 +20,9 @@ final class LocalExpenseRepository implements ExpenseRepository {
 
   @override
   Future<int> put(Expense expense) async {
-    return db.put(expense);
+    final id = db.put(expense);
+
+    _expenseUpdateController.add(expense);
+    return id;
   }
 }

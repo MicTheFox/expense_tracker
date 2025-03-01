@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+final expenseRepository = LocalExpenseRepository();
+
 final GoRouter router = GoRouter(
   initialLocation: '/add-expense',
   routes: [
@@ -33,7 +35,6 @@ final GoRouter router = GoRouter(
         ),
       ],
       builder: (context, state, navigationShell) {
-        final expenseRepository = LocalExpenseRepository();
         return MultiBlocProvider(
           providers: [
             BlocProvider(

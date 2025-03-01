@@ -11,9 +11,11 @@ class ExpenseCubit extends Cubit<ExpenseState> {
 
   void add(Expense expense) async {
     try {
+      emit(ExpenseAdding(expense: expense));
       expenseRepository.put(expense);
 
       emit(ExpenseAdded(expense: expense));
+      emit(ExpenseEmpty());
     } catch (_) {
       emit(ExpenseAddedError(expense: expense));
     }

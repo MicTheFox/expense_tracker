@@ -8,6 +8,15 @@ final class ExpenseEmpty extends ExpenseState {
   List<Object?> get props => [];
 }
 
+final class ExpenseAdding extends ExpenseState {
+  final Expense expense;
+
+  ExpenseAdding({required this.expense});
+
+  @override
+  List<Object?> get props => [expense];
+}
+
 final class ExpenseAdded extends ExpenseState {
   final Expense expense;
 

@@ -45,7 +45,13 @@ class Expense extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [
+    id,
+    createdAt,
+    expenseDateTime,
+    amount,
+    description,
+  ];
 }
 
 enum Category {
