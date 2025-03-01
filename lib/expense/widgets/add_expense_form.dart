@@ -1,5 +1,6 @@
 import 'package:expense_tracker/expense/data_models/expense.dart';
 import 'package:expense_tracker/expense/state/expense_cubit.dart';
+import 'package:expense_tracker/utils/category_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +16,13 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
   final _formKey = GlobalKey<FormState>();
 
   final _categoryItems = Category.values.map(
-    (category) => DropdownMenuItem(value: category, child: Text(category.name)),
+    (category) => DropdownMenuItem(
+      value: category,
+      child: Row(
+        spacing: 8,
+        children: [Icon(category.icon), Text(category.name)],
+      ),
+    ),
   );
 
   final _amountController = TextEditingController();
@@ -34,6 +41,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
         spacing: 16,
         children: [
           DropdownButtonFormField(
+            hint: const Text('Choose a category (optional)'),
             items: _categoryItems.toList(),
             value: _selectedCategory,
             onChanged: (newSelection) {

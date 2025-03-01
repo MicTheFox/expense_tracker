@@ -2,6 +2,7 @@ import 'package:expense_tracker/expense/data_models/expense.dart';
 import 'package:expense_tracker/expense/state/expense_cubit.dart';
 import 'package:expense_tracker/expense/state/expense_state.dart';
 import 'package:expense_tracker/expense/widgets/add_expense_form.dart';
+import 'package:expense_tracker/utils/keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,15 +12,24 @@ class AddExpensePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
-      child: BlocBuilder<ExpenseCubit, ExpenseState>(
-        builder:
-            (context, state) => switch (state) {
-              ExpenseEmpty() => AddExpenseForm(isLoading: false),
-              ExpenseAdding() => AddExpenseForm(isLoading: true),
-              ExpenseAdded() => _Added(expense: state.expense),
-              ExpenseAddedError() => const _Error(),
-            },
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        spacing: 16,
+        children: [
+          Text(
+            'Add expense',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          BlocBuilder<ExpenseCubit, ExpenseState>(
+            builder:
+                (context, state) => switch (state) {
+                  ExpenseEmpty() => const AddExpenseForm(isLoading: false),
+                  ExpenseAdding() => const AddExpenseForm(isLoading: true),
+                  ExpenseAdded() => _Added(expense: state.expense),
+                  ExpenseAddedError() => const _Error(),
+                },
+          ),
+        ],
       ),
     );
   }
@@ -40,6 +50,9 @@ class _Error extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('An error occured'));
+    return const Center(
+      key: addExpensePageErrorKey,
+      child: Text('An error occurred'),
+    );
   }
 }
