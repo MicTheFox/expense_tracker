@@ -14,10 +14,15 @@ class AddExpenseForm extends StatefulWidget {
 class _AddExpenseFormState extends State<AddExpenseForm> {
   final _formKey = GlobalKey<FormState>();
 
+  final _categoryItems = Category.values.map(
+    (category) => DropdownMenuItem(value: category, child: Text(category.name)),
+  );
+
   final _amountController = TextEditingController();
   final _descriptionController = TextEditingController();
 
   DateTime _expenseDateTime = DateTime.now();
+  Category? _selectedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +33,15 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
       child: Column(
         spacing: 16,
         children: [
+          DropdownButtonFormField(
+            items: _categoryItems.toList(),
+            value: _selectedCategory,
+            onChanged: (newSelection) {
+              setState(() {
+                _selectedCategory = newSelection;
+              });
+            },
+          ),
           TextFormField(
             controller: _amountController,
             decoration: const InputDecoration(labelText: 'Amount'),
@@ -43,18 +57,19 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
               return null;
             },
           ),
-          TextFormField(
-            controller: _descriptionController,
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            decoration: const InputDecoration(labelText: 'Description'),
-          ),
           InputDatePickerFormField(
             initialDate: _expenseDateTime,
             firstDate: now.subtract(const Duration(days: 365)),
             lastDate: now,
             onDateSaved: (date) => _expenseDateTime = date,
           ),
+          TextFormField(
+            controller: _descriptionController,
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            decoration: const InputDecoration(labelText: 'Description'),
+          ),
+
           ElevatedButton(
             onPressed:
                 widget.isLoading
@@ -67,6 +82,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
                           expenseDateTime: _expenseDateTime,
                           amount: double.parse(_amountController.text),
                           description: _descriptionController.text,
+                          category: _selectedCategory,
                         );
 
                         context.read<ExpenseCubit>().add(expense);
