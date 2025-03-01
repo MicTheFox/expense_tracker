@@ -3,21 +3,30 @@ import 'package:expense_tracker/expense/state/expense_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddExpenseForm extends StatelessWidget {
+class AddExpenseForm extends StatefulWidget {
   final bool isLoading;
-  AddExpenseForm({super.key, required this.isLoading});
+  const AddExpenseForm({super.key, required this.isLoading});
 
+  @override
+  State<AddExpenseForm> createState() => _AddExpenseFormState();
+}
+
+class _AddExpenseFormState extends State<AddExpenseForm> {
   final _formKey = GlobalKey<FormState>();
 
   final _amountController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final DateTime _expenseDateTime = DateTime.now();
+
+  DateTime _expenseDateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+
     return Form(
       key: _formKey,
       child: Column(
+        spacing: 16,
         children: [
           TextFormField(
             controller: _amountController,
@@ -40,12 +49,19 @@ class AddExpenseForm extends StatelessWidget {
             maxLines: null,
             decoration: const InputDecoration(labelText: 'Description'),
           ),
+          InputDatePickerFormField(
+            initialDate: _expenseDateTime,
+            firstDate: now.subtract(const Duration(days: 365)),
+            lastDate: now,
+            onDateSaved: (date) => _expenseDateTime = date,
+          ),
           ElevatedButton(
             onPressed:
-                isLoading
+                widget.isLoading
                     ? null
                     : () {
                       if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
                         final expense = Expense(
                           createdAt: DateTime.now(),
                           expenseDateTime: _expenseDateTime,
@@ -57,7 +73,7 @@ class AddExpenseForm extends StatelessWidget {
                       }
                     },
             child:
-                isLoading
+                widget.isLoading
                     ? const CircularProgressIndicator()
                     : const Text('Submit'),
           ),
