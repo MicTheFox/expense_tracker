@@ -5,7 +5,7 @@ import 'package:expense_tracker/expense/state/expense_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../expense_test_factory.dart';
+import '../../expense_test_factory.dart';
 
 class MockExpenseRepository extends Mock implements ExpenseRepository {}
 

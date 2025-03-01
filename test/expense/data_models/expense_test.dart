@@ -1,7 +1,7 @@
 import 'package:expense_tracker/expense/data_models/expense.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../expense_test_factory.dart';
+import '../../expense_test_factory.dart';
 
 void main() {
   final expenseWithoutCategory = ExpenseTestFactory.expenseWithoutCategory;
@@ -39,6 +39,7 @@ void main() {
       const category = Category.travel;
       final expense = Expense(
         createdAt: DateTime(2025, 2, 28, 20, 38),
+        expenseDateTime: DateTime(2025, 2, 28, 20, 38),
         amount: 42.42,
         description: 'description',
         category: category,

@@ -1,11 +1,15 @@
+import 'package:equatable/equatable.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
-class Expense {
+class Expense extends Equatable {
   @Id()
   int id;
   @Property(type: PropertyType.date)
   DateTime createdAt;
+
+  @Property(type: PropertyType.date)
+  DateTime expenseDateTime;
   double amount;
   String description;
 
@@ -34,10 +38,14 @@ class Expense {
   Expense({
     this.id = 0,
     required this.createdAt,
+    required this.expenseDateTime,
     required this.amount,
     required this.description,
     this.category,
   });
+
+  @override
+  List<Object?> get props => [id];
 }
 
 enum Category {

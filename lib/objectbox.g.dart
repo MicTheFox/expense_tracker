@@ -22,7 +22,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(1, 422305482666604764),
       name: 'Expense',
-      lastPropertyId: const obx_int.IdUid(5, 9030875546464937255),
+      lastPropertyId: const obx_int.IdUid(6, 785828489845107416),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -49,6 +49,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(5, 9030875546464937255),
             name: 'description',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 785828489845107416),
+            name: 'expenseDateTime',
+            type: 10,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -113,12 +118,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Expense object, fb.Builder fbb) {
           final descriptionOffset = fbb.writeString(object.description);
-          fbb.startTable(6);
+          fbb.startTable(7);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.createdAt.millisecondsSinceEpoch);
           fbb.addFloat64(2, object.amount);
           fbb.addInt64(3, object.dbCategory);
           fbb.addOffset(4, descriptionOffset);
+          fbb.addInt64(5, object.expenseDateTime.millisecondsSinceEpoch);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -129,6 +135,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           final createdAtParam = DateTime.fromMillisecondsSinceEpoch(
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0));
+          final expenseDateTimeParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0));
           final amountParam =
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 8, 0);
           final descriptionParam =
@@ -137,6 +145,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final object = Expense(
               id: idParam,
               createdAt: createdAtParam,
+              expenseDateTime: expenseDateTimeParam,
               amount: amountParam,
               description: descriptionParam)
             ..dbCategory = const fb.Int64Reader()
@@ -170,4 +179,8 @@ class Expense_ {
   /// See [Expense.description].
   static final description =
       obx.QueryStringProperty<Expense>(_entities[0].properties[4]);
+
+  /// See [Expense.expenseDateTime].
+  static final expenseDateTime =
+      obx.QueryDateProperty<Expense>(_entities[0].properties[5]);
 }

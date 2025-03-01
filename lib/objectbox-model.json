@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:422305482666604764",
-      "lastPropertyId": "5:9030875546464937255",
+      "lastPropertyId": "6:785828489845107416",
       "name": "Expense",
       "properties": [
         {
@@ -33,6 +33,11 @@
           "id": "5:9030875546464937255",
           "name": "description",
           "type": 9
+        },
+        {
+          "id": "6:785828489845107416",
+          "name": "expenseDateTime",
+          "type": 10
         }
       ],
       "relations": []

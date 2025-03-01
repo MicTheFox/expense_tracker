@@ -1,6 +1,8 @@
-import 'package:expense_tracker/expense/repository/expense_repository.dart';
+import 'package:expense_tracker/expense/repository/local_expense_repository.dart';
 import 'package:expense_tracker/expense/state/expense_cubit.dart';
 import 'package:expense_tracker/expense/widgets/add_expense_page.dart';
+import 'package:expense_tracker/expense_history/state/expense_history_cubit.dart';
+import 'package:expense_tracker/expense_history/widgets/expense_history_page.dart';
 import 'package:expense_tracker/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,18 +27,30 @@ final GoRouter router = GoRouter(
             GoRoute(
               name: RouteNames.historyRouteName,
               path: '/history',
-              builder: (_, __) => const Placeholder(),
+              builder: (_, __) => const ExpenseHistoryPage(),
             ),
           ],
         ),
       ],
-      builder:
-          (context, state, navigationShell) => BlocProvider(
-            create:
-                (context) =>
-                    ExpenseCubit(expenseRepository: ExpenseRepository()),
-            child: _Shell(navigationShell: navigationShell),
-          ),
+      builder: (context, state, navigationShell) {
+        final expenseRepository = LocalExpenseRepository();
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create:
+                  (context) =>
+                      ExpenseCubit(expenseRepository: expenseRepository),
+            ),
+            BlocProvider(
+              create:
+                  (context) =>
+                      ExpenseHistoryCubit(expenseRepository: expenseRepository)
+                        ..load(),
+            ),
+          ],
+          child: _Shell(navigationShell: navigationShell),
+        );
+      },
     ),
   ],
 );
@@ -57,7 +71,7 @@ class _Shell extends StatelessWidget {
           NavigationDestination(icon: Icon(Icons.history), label: 'History'),
         ],
       ),
-      body: navigationShell,
+      body: SafeArea(child: navigationShell),
     );
   }
 }

@@ -30,6 +30,7 @@ class _Empty extends StatelessWidget {
         onPressed: () {
           final dummy = Expense(
             createdAt: DateTime.now(),
+            expenseDateTime: DateTime.now(),
             amount: 12.98,
             category: Category.travel,
             description: 'description',
