@@ -27,7 +27,11 @@ void main() {
       ).thenAnswer((_) => Future.value(1));
     },
     act: (cubit) => cubit.add(expenseWithoutCategory),
-    expect: () => [ExpenseAdded(expense: expenseWithoutCategory)],
+    expect:
+        () => [
+          ExpenseAdding(expense: expenseWithoutCategory),
+          ExpenseAdded(expense: expenseWithoutCategory),
+        ],
   );
 
   blocTest(
@@ -39,6 +43,10 @@ void main() {
       ).thenThrow(Exception());
     },
     act: (cubit) => cubit.add(expenseWithoutCategory),
-    expect: () => [ExpenseAddedError(expense: expenseWithoutCategory)],
+    expect:
+        () => [
+          ExpenseAdding(expense: expenseWithoutCategory),
+          ExpenseAddedError(expense: expenseWithoutCategory),
+        ],
   );
 }

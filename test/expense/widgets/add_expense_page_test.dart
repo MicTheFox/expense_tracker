@@ -23,7 +23,7 @@ void main() {
 
     widget = BlocProvider<ExpenseCubit>(
       create: (_) => mockExpenseCubit,
-      child: const MaterialApp(home: Material(child: AddExpensePage())),
+      child: const MaterialApp(home: Scaffold(body: AddExpensePage())),
     );
   });
 
@@ -55,14 +55,42 @@ void main() {
     expect(find.byType(AddExpenseForm), findsOneWidget);
   });
 
+  testWidgets(
+    'displays added expense SnackBar if state ExpenseAdded is emitted',
+    (WidgetTester tester) async {
+      whenListen(
+        mockExpenseCubit,
+        Stream.fromIterable([
+          ExpenseAdded(expense: ExpenseTestFactory.expenseWithoutCategory),
+        ]),
+        initialState: ExpenseEmpty(),
+      );
+      await tester.pumpWidget(widget);
+      await tester.pumpAndSettle();
+
+      mockExpenseCubit.add(ExpenseTestFactory.expenseWithoutCategory);
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(addExpensePageAddedKey), findsOneWidget);
+    },
+  );
+
   testWidgets('displays error if state is ExpenseAddedError', (
     WidgetTester tester,
   ) async {
-    when(() => mockExpenseCubit.state).thenReturn(
-      ExpenseAddedError(expense: ExpenseTestFactory.expenseWithoutCategory),
+    whenListen(
+      mockExpenseCubit,
+      Stream.fromIterable([
+        ExpenseAddedError(expense: ExpenseTestFactory.expenseWithoutCategory),
+      ]),
+      initialState: ExpenseEmpty(),
     );
 
     await tester.pumpWidget(widget);
+    await tester.pumpAndSettle();
+
+    mockExpenseCubit.add(ExpenseTestFactory.expenseWithoutCategory);
+    await tester.pumpAndSettle();
 
     expect(find.byKey(addExpensePageErrorKey), findsOneWidget);
   });

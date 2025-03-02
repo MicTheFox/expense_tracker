@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+const addExpensePageAddedKey = Key('addExpensePageAdded');
 const addExpensePageErrorKey = Key('addExpensePageError');
 
 const addExpenseFormAmountTextFieldKey = Key('addExpenseFormAmountTextField');

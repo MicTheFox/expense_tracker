@@ -83,8 +83,8 @@ void main() {
         () => [
           ExpenseHistoryLoaded(
             expenses: UnmodifiableListView([
-              ExpenseTestFactory.expenseWithoutCategory,
               ExpenseTestFactory.expenseFirstMarch,
+              ExpenseTestFactory.expenseWithoutCategory,
             ]),
           ),
         ],

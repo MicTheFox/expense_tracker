@@ -15,7 +15,6 @@ class ExpenseCubit extends Cubit<ExpenseState> {
       expenseRepository.put(expense);
 
       emit(ExpenseAdded(expense: expense));
-      emit(ExpenseEmpty());
     } catch (_) {
       emit(ExpenseAddedError(expense: expense));
     }
