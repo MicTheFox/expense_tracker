@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:expense_tracker/expense/data_models/expense.dart';
 import 'package:expense_tracker/expense/repository/expense_repository.dart';
-import 'package:expense_tracker/main.dart';
+import 'package:objectbox/objectbox.dart';
 
 final class LocalExpenseRepository implements ExpenseRepository {
-  final db = localStorage.store.box<Expense>();
+  final Box<Expense> db;
+
+  LocalExpenseRepository({required this.db});
 
   final StreamController<Expense> _expenseUpdateController =
       StreamController.broadcast();

@@ -4,6 +4,7 @@ import 'package:expense_tracker/expense/data_models/expense.dart';
 import 'package:expense_tracker/expense_history/state/expense_history_cubit.dart';
 import 'package:expense_tracker/expense_history/state/expense_history_state.dart';
 import 'package:expense_tracker/utils/category_extension.dart';
+import 'package:expense_tracker/utils/keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -67,6 +68,7 @@ class _ExpenseTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      key: expenseHistoryPageListTileKey,
       title: Text(expense.amount.toString()),
       subtitle: Text(expense.description),
       trailing: expense.category == null ? null : Icon(expense.category!.icon),

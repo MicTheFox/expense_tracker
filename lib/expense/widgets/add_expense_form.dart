@@ -1,6 +1,7 @@
 import 'package:expense_tracker/expense/data_models/expense.dart';
 import 'package:expense_tracker/expense/state/expense_cubit.dart';
 import 'package:expense_tracker/utils/category_extension.dart';
+import 'package:expense_tracker/utils/keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -51,6 +52,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
             },
           ),
           TextFormField(
+            key: addExpenseFormAmountTextFieldKey,
             controller: _amountController,
             decoration: const InputDecoration(labelText: 'Amount'),
             validator: (value) {
@@ -77,8 +79,8 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
             maxLines: null,
             decoration: const InputDecoration(labelText: 'Description'),
           ),
-
           ElevatedButton(
+            key: addExpenseFormSubmitButtonKey,
             onPressed:
                 widget.isLoading
                     ? null

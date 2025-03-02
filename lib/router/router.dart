@@ -1,16 +1,15 @@
-import 'package:expense_tracker/expense/repository/local_expense_repository.dart';
+import 'package:expense_tracker/expense/repository/expense_repository.dart';
 import 'package:expense_tracker/expense/state/expense_cubit.dart';
 import 'package:expense_tracker/expense/widgets/add_expense_page.dart';
 import 'package:expense_tracker/expense_history/state/expense_history_cubit.dart';
 import 'package:expense_tracker/expense_history/widgets/expense_history_page.dart';
 import 'package:expense_tracker/router/route_names.dart';
+import 'package:expense_tracker/utils/keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-final expenseRepository = LocalExpenseRepository();
-
-final GoRouter router = GoRouter(
+GoRouter router(ExpenseRepository expenseRepository) => GoRouter(
   initialLocation: '/add-expense',
   routes: [
     StatefulShellRoute.indexedStack(
@@ -69,7 +68,11 @@ class _Shell extends StatelessWidget {
         onDestinationSelected: navigationShell.goBranch,
         destinations: const [
           NavigationDestination(icon: Icon(Icons.add), label: 'Add'),
-          NavigationDestination(icon: Icon(Icons.history), label: 'History'),
+          NavigationDestination(
+            key: navigationHistoryKey,
+            icon: Icon(Icons.history),
+            label: 'History',
+          ),
         ],
       ),
       body: SafeArea(child: navigationShell),
