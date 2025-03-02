@@ -21,7 +21,10 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
       value: category,
       child: Row(
         spacing: 8,
-        children: [Icon(category.icon), Text(category.name)],
+        children: [
+          CircleAvatar(child: Icon(category.icon)),
+          Text(category.displayName),
+        ],
       ),
     ),
   );
@@ -39,47 +42,48 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
     return Form(
       key: _formKey,
       child: Column(
-        spacing: 16,
+        spacing: 32,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          DropdownButtonFormField(
-            hint: const Text('Choose a category (optional)'),
-            items: _categoryItems.toList(),
-            value: _selectedCategory,
-            onChanged: (newSelection) {
-              setState(() {
-                _selectedCategory = newSelection;
-              });
-            },
+          _FormFieldCard(
+            children: [
+              DropdownButtonFormField(
+                hint: const Text('Choose a category (optional)'),
+                items: _categoryItems.toList(),
+                value: _selectedCategory,
+                onChanged: (newSelection) {
+                  setState(() {
+                    _selectedCategory = newSelection;
+                  });
+                },
+              ),
+              TextFormField(
+                key: addExpenseFormAmountTextFieldKey,
+                controller: _amountController,
+                decoration: const InputDecoration(
+                  labelText: 'Amount',
+                  suffixIcon: Icon(Icons.euro),
+                ),
+                validator: _amountValidator,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: InputDatePickerFormField(
+                  initialDate: _expenseDateTime,
+                  firstDate: now.subtract(const Duration(days: 365)),
+                  lastDate: now,
+                  onDateSaved: (date) => _expenseDateTime = date,
+                ),
+              ),
+              TextFormField(
+                controller: _descriptionController,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: const InputDecoration(labelText: 'Description'),
+              ),
+            ],
           ),
-          TextFormField(
-            key: addExpenseFormAmountTextFieldKey,
-            controller: _amountController,
-            decoration: const InputDecoration(labelText: 'Amount'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some amount';
-              }
-
-              final amount = double.tryParse(value);
-              if (amount == null) {
-                return 'Please enter a valid amount';
-              }
-              return null;
-            },
-          ),
-          InputDatePickerFormField(
-            initialDate: _expenseDateTime,
-            firstDate: now.subtract(const Duration(days: 365)),
-            lastDate: now,
-            onDateSaved: (date) => _expenseDateTime = date,
-          ),
-          TextFormField(
-            controller: _descriptionController,
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            decoration: const InputDecoration(labelText: 'Description'),
-          ),
-          ElevatedButton(
+          FilledButton(
             key: addExpenseFormSubmitButtonKey,
             onPressed:
                 widget.isLoading
@@ -101,9 +105,37 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
             child:
                 widget.isLoading
                     ? const CircularProgressIndicator()
-                    : const Text('Submit'),
+                    : const Text('Add'),
           ),
         ],
+      ),
+    );
+  }
+
+  String? _amountValidator(value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter some amount';
+    }
+
+    final amount = double.tryParse(value);
+    if (amount == null) {
+      return 'Please enter a valid amount';
+    }
+
+    return null;
+  }
+}
+
+class _FormFieldCard extends StatelessWidget {
+  final List<Widget> children;
+  const _FormFieldCard({required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(spacing: 32, children: children),
       ),
     );
   }

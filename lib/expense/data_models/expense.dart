@@ -11,6 +11,7 @@ class Expense extends Equatable {
   @Property(type: PropertyType.date)
   DateTime expenseDateTime;
   double amount;
+  String currency;
   String description;
 
   @Transient()
@@ -40,6 +41,7 @@ class Expense extends Equatable {
     required this.createdAt,
     required this.expenseDateTime,
     required this.amount,
+    this.currency = 'EUR',
     required this.description,
     this.category,
   });
