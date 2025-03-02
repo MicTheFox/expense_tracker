@@ -35,10 +35,14 @@ class _Loaded extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (state.expenses.isEmpty) {
-      return const Center(
-        key: expenseHistoryPageEmptyKey,
-        child: Text(
-          'Your expenses will show up here after you added your first expense.',
+      return const Padding(
+        padding: EdgeInsets.all(32),
+        child: Center(
+          key: expenseHistoryPageEmptyKey,
+          child: Text(
+            'Your expenses will show up here after you added your first expense.',
+            textAlign: TextAlign.center,
+          ),
         ),
       );
     }
@@ -48,6 +52,7 @@ class _Loaded extends StatelessWidget {
         SliverAppBar(
           actions: [
             DropdownButton<Category?>(
+              underline: const SizedBox(),
               padding: const EdgeInsets.only(bottom: 6),
               items: [
                 ...CategoryExtension.dropdownItems,
@@ -140,7 +145,7 @@ class _ExpenseTile extends StatelessWidget {
       trailing:
           expense.category == null
               ? null
-              : CircleAvatar(child: Icon(expense.category!.icon)),
+              : CircleAvatar(child: Icon(expense.category!.icon, size: 16)),
     );
   }
 }

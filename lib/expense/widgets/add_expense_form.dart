@@ -37,6 +37,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
               DropdownButtonFormField(
                 hint: const Text('Choose a category (optional)'),
                 items: CategoryExtension.dropdownItems,
+                isDense: false,
                 value: _selectedCategory,
                 onChanged: (newSelection) {
                   setState(() {

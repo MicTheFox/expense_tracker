@@ -14,6 +14,7 @@ class MonthlyStatistics extends StatelessWidget {
       (current, element) => current + element.$2,
     );
     return ExpansionTile(
+      leading: const Icon(Icons.table_chart_outlined),
       collapsedBackgroundColor: Theme.of(context).colorScheme.primaryContainer,
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       title: Text(

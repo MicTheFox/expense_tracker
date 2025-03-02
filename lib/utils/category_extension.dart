@@ -22,7 +22,7 @@ extension CategoryExtension on Category {
               child: Row(
                 spacing: 8,
                 children: [
-                  CircleAvatar(child: Icon(category.icon)),
+                  CircleAvatar(child: Icon(category.icon, size: 16)),
                   Text(category.displayName),
                 ],
               ),
