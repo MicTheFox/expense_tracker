@@ -35,36 +35,13 @@ class _Loaded extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (state.expenses.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.all(32),
-        child: Center(
-          key: expenseHistoryPageEmptyKey,
-          child: Text(
-            'Your expenses will show up here after you added your first expense.',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
+      return const _Empty();
     }
 
     return CustomScrollView(
       slivers: [
         SliverAppBar(
-          actions: [
-            DropdownButton<Category?>(
-              underline: const SizedBox(),
-              padding: const EdgeInsets.only(bottom: 6),
-              items: [
-                ...CategoryExtension.dropdownItems,
-                const DropdownMenuItem(child: Text('All categories')),
-              ],
-              hint: const Text('Category filter'),
-              value: state.categoryFilter,
-              onChanged: (category) {
-                context.read<ExpenseHistoryCubit>().filter(category);
-              },
-            ),
-          ],
+          actions: [_CategorySelector(filter: state.categoryFilter)],
         ),
         SliverToBoxAdapter(
           child: MonthlyStatistics(
@@ -90,6 +67,46 @@ class _Loaded extends StatelessWidget {
           ),
         ],
       ],
+    );
+  }
+}
+
+class _CategorySelector extends StatelessWidget {
+  final Category? filter;
+  const _CategorySelector({this.filter});
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<Category?>(
+      underline: const SizedBox(),
+      padding: const EdgeInsets.only(bottom: 6),
+      items: [
+        ...CategoryExtension.dropdownItems,
+        const DropdownMenuItem(child: Text('All categories')),
+      ],
+      hint: const Text('Category filter'),
+      value: filter,
+      onChanged: (category) {
+        context.read<ExpenseHistoryCubit>().filter(category);
+      },
+    );
+  }
+}
+
+class _Empty extends StatelessWidget {
+  const _Empty();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.all(32),
+      child: Center(
+        key: expenseHistoryPageEmptyKey,
+        child: Text(
+          'Your expenses will show up here after you added your first expense.',
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 }

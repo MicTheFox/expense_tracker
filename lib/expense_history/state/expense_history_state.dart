@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:equatable/equatable.dart';
 import 'package:expense_tracker/expense/data_models/expense.dart';
+import 'package:expense_tracker/expense_history/state/grouped_expenses.dart';
 import 'package:expense_tracker/utils/datetime_extension.dart';
 
 sealed class ExpenseHistoryState extends Equatable {}
@@ -112,18 +113,4 @@ final class ExpenseHistoryError extends ExpenseHistoryState {
 
   @override
   List<Object?> get props => [];
-}
-
-class GroupedExpenses extends Equatable {
-  final UnmodifiableListView<Expense> expenses;
-  final DateTime date;
-
-  const GroupedExpenses({required this.expenses, required this.date});
-
-  @override
-  List<Object?> get props => [date, expenses];
-
-  double get totalAmount => expenses
-      .map((expense) => expense.amount)
-      .reduce((first, second) => first + second);
 }
