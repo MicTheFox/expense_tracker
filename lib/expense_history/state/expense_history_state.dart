@@ -73,4 +73,8 @@ class GroupedExpenses extends Equatable {
 
   @override
   List<Object?> get props => [date, expenses];
+
+  double get totalAmount => expenses
+      .map((expense) => expense.amount)
+      .reduce((first, second) => first + second);
 }

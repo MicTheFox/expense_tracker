@@ -2,8 +2,8 @@ import 'package:expense_tracker/expense/data_models/expense.dart';
 import 'package:expense_tracker/expense/state/expense_cubit.dart';
 import 'package:expense_tracker/expense/state/expense_state.dart';
 import 'package:expense_tracker/expense/widgets/add_expense_form.dart';
+import 'package:expense_tracker/utils/formatters.dart';
 import 'package:expense_tracker/utils/keys.dart';
-import 'package:expense_tracker/utils/string_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -53,7 +53,7 @@ class AddExpensePage extends StatelessWidget {
   SnackBar _addedSnackBar(Expense expense) => SnackBar(
     key: addExpensePageAddedKey,
     content: Text(
-      'Expense with amount ${StringFormatters.currencyFormatter(expense.currency).format(expense.amount)} was added.',
+      'Expense with amount ${Formatters.currencyFormatter(expense.currency).format(expense.amount)} was added.',
     ),
   );
 

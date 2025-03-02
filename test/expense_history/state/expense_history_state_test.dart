@@ -38,4 +38,16 @@ void main() {
 
     expect(state.groupedExpenses, expected);
   });
+
+  test('totalAmount is calculated correctly', () async {
+    final groupedExpenses = GroupedExpenses(
+      expenses: UnmodifiableListView([
+        ExpenseTestFactory.expenseWithoutCategory,
+        ExpenseTestFactory.expense28thFebruary,
+      ]),
+      date: DateTime(2025, 2, 28),
+    );
+
+    expect(groupedExpenses.totalAmount, 42.42 + 22.42);
+  });
 }

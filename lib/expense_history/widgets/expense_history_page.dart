@@ -4,11 +4,10 @@ import 'package:expense_tracker/expense/data_models/expense.dart';
 import 'package:expense_tracker/expense_history/state/expense_history_cubit.dart';
 import 'package:expense_tracker/expense_history/state/expense_history_state.dart';
 import 'package:expense_tracker/utils/category_extension.dart';
+import 'package:expense_tracker/utils/formatters.dart';
 import 'package:expense_tracker/utils/keys.dart';
-import 'package:expense_tracker/utils/string_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class ExpenseHistoryPage extends StatelessWidget {
   const ExpenseHistoryPage({super.key});
@@ -49,7 +48,12 @@ class _Loaded extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         for (final group in groupedExpenses) ...[
-          SliverToBoxAdapter(child: _DateHeadline(date: group.date)),
+          SliverToBoxAdapter(
+            child: _DateHeadline(
+              date: group.date,
+              totalAmount: group.totalAmount,
+            ),
+          ),
           SliverList.separated(
             itemCount: group.expenses.length,
             itemBuilder: (context, index) {
@@ -68,20 +72,31 @@ class _Loaded extends StatelessWidget {
 
 class _DateHeadline extends StatelessWidget {
   final DateTime date;
-  const _DateHeadline({required this.date});
+  final double totalAmount;
+  const _DateHeadline({required this.date, required this.totalAmount});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
+      key: expenseHistoryPageHeadlineKey,
       padding: const EdgeInsets.only(bottom: 8, top: 24),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondaryContainer,
         ),
-        child: Text(
-          DateFormat.yMMMd().format(date),
-          style: Theme.of(context).textTheme.headlineSmall,
+        child: Row(
+          children: [
+            Text(
+              Formatters.dateFormatter.format(date),
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const Spacer(),
+            Text(
+              Formatters.currencyFormatter('EUR').format(totalAmount),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
         ),
       ),
     );
@@ -97,9 +112,7 @@ class _ExpenseTile extends StatelessWidget {
     return ListTile(
       key: expenseHistoryPageListTileKey,
       title: Text(
-        StringFormatters.currencyFormatter(
-          expense.currency,
-        ).format(expense.amount),
+        Formatters.currencyFormatter(expense.currency).format(expense.amount),
       ),
       titleTextStyle: Theme.of(
         context,

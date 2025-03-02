@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
-class StringFormatters {
-  StringFormatters._();
+class Formatters {
+  Formatters._();
 
   static NumberFormat currencyFormatter(String currency) =>
       NumberFormat.simpleCurrency(
@@ -9,4 +9,6 @@ class StringFormatters {
         name: currency,
         decimalDigits: 2,
       );
+
+  static DateFormat get dateFormatter => DateFormat.yMMMd();
 }
