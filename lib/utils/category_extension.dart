@@ -13,4 +13,20 @@ extension CategoryExtension on Category {
     Category.travel => 'Travel',
     Category.shopping => 'Shopping',
   };
+
+  static List<DropdownMenuItem<Category>> get dropdownItems =>
+      Category.values
+          .map(
+            (category) => DropdownMenuItem(
+              value: category,
+              child: Row(
+                spacing: 8,
+                children: [
+                  CircleAvatar(child: Icon(category.icon)),
+                  Text(category.displayName),
+                ],
+              ),
+            ),
+          )
+          .toList();
 }

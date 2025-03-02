@@ -48,4 +48,19 @@ class ExpenseHistoryCubit extends Cubit<ExpenseHistoryState> {
       emit(ExpenseHistoryError());
     }
   }
+
+  void filter(Category? category) async {
+    final state = this.state;
+    switch (state) {
+      case ExpenseHistoryUnloaded() || ExpenseHistoryError():
+        return;
+      case ExpenseHistoryLoaded():
+        emit(
+          ExpenseHistoryLoaded(
+            expenses: state.expenses,
+            categoryFilter: category,
+          ),
+        );
+    }
+  }
 }

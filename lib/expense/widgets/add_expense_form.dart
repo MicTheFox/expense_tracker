@@ -16,19 +16,6 @@ class AddExpenseForm extends StatefulWidget {
 class _AddExpenseFormState extends State<AddExpenseForm> {
   final _formKey = GlobalKey<FormState>();
 
-  final _categoryItems = Category.values.map(
-    (category) => DropdownMenuItem(
-      value: category,
-      child: Row(
-        spacing: 8,
-        children: [
-          CircleAvatar(child: Icon(category.icon)),
-          Text(category.displayName),
-        ],
-      ),
-    ),
-  );
-
   final _amountController = TextEditingController();
   final _descriptionController = TextEditingController();
 
@@ -49,7 +36,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
             children: [
               DropdownButtonFormField(
                 hint: const Text('Choose a category (optional)'),
-                items: _categoryItems.toList(),
+                items: CategoryExtension.dropdownItems,
                 value: _selectedCategory,
                 onChanged: (newSelection) {
                   setState(() {

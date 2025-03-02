@@ -13,15 +13,21 @@ final class ExpenseHistoryUnloaded extends ExpenseHistoryState {
 
 final class ExpenseHistoryLoaded extends ExpenseHistoryState {
   final UnmodifiableListView<Expense> expenses;
+  final Category? categoryFilter;
 
-  ExpenseHistoryLoaded({required this.expenses});
+  ExpenseHistoryLoaded({required this.expenses, this.categoryFilter});
 
   @override
-  List<Object?> get props => [expenses];
+  List<Object?> get props => [expenses, categoryFilter];
 
   UnmodifiableListView<GroupedExpenses> get groupedExpenses {
+    final filteredExpenses =
+        categoryFilter == null
+            ? expenses
+            : expenses.where((expense) => expense.category == categoryFilter);
+
     final groupedExpenses =
-        expenses
+        filteredExpenses
             .fold<Map<DateTime, List<Expense>>>({}, _groupExpensesByDate)
             .map(_toGroupedExpensesMap)
             .values

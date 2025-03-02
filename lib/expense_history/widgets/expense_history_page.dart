@@ -21,6 +21,7 @@ class ExpenseHistoryPage extends StatelessWidget {
               child: CircularProgressIndicator(),
             ),
             ExpenseHistoryLoaded() => _Loaded(
+              filter: state.categoryFilter,
               groupedExpenses: state.groupedExpenses,
             ),
             ExpenseHistoryError() => const Center(
@@ -32,8 +33,9 @@ class ExpenseHistoryPage extends StatelessWidget {
 }
 
 class _Loaded extends StatelessWidget {
+  final Category? filter;
   final UnmodifiableListView<GroupedExpenses> groupedExpenses;
-  const _Loaded({required this.groupedExpenses});
+  const _Loaded({required this.groupedExpenses, required this.filter});
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,21 @@ class _Loaded extends StatelessWidget {
 
     return CustomScrollView(
       slivers: [
+        SliverAppBar(
+          actions: [
+            DropdownButton<Category?>(
+              items: [
+                ...CategoryExtension.dropdownItems,
+                const DropdownMenuItem(child: Text('All categories')),
+              ],
+              hint: const Text('Category filter'),
+              value: filter,
+              onChanged: (category) {
+                context.read<ExpenseHistoryCubit>().filter(category);
+              },
+            ),
+          ],
+        ),
         for (final group in groupedExpenses) ...[
           SliverToBoxAdapter(
             child: _DateHeadline(
