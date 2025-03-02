@@ -20,14 +20,14 @@ final class ExpenseHistoryLoaded extends ExpenseHistoryState {
   @override
   List<Object?> get props => [expenses, categoryFilter];
 
-  UnmodifiableListView<GroupedExpenses> get groupedExpenses {
-    final filteredExpenses =
-        categoryFilter == null
-            ? expenses
-            : expenses.where((expense) => expense.category == categoryFilter);
+  Iterable<Expense> get _filteredExpenses =>
+      categoryFilter == null
+          ? expenses
+          : expenses.where((expense) => expense.category == categoryFilter);
 
+  UnmodifiableListView<GroupedExpenses> get groupedExpenses {
     final groupedExpenses =
-        filteredExpenses
+        _filteredExpenses
             .fold<Map<DateTime, List<Expense>>>({}, _groupExpensesByDate)
             .map(_toGroupedExpensesMap)
             .values
@@ -40,19 +40,62 @@ final class ExpenseHistoryLoaded extends ExpenseHistoryState {
     return UnmodifiableListView(groupedExpenses);
   }
 
+  UnmodifiableListView<(DateTime, double)> get monthlyAmountsOfLastYear {
+    final oneYearAgo = DateTime.now().subtract(const Duration(days: 365));
+    final monthlyAmounts =
+        _filteredExpenses
+            .where((expense) => expense.expenseDateTime.isAfter(oneYearAgo))
+            .fold<Map<DateTime, List<Expense>>>({}, _groupExpensesByMonth)
+            .map(
+              (key, value) => MapEntry(key, (
+                key,
+                value
+                    .map((expense) => expense.amount)
+                    .reduce((amountA, amountB) => amountA + amountB),
+              )),
+            )
+            .values;
+
+    monthlyAmounts.toList().sort(
+      (groupA, groupB) => groupB.$1.compareTo(groupA.$1),
+    );
+
+    return UnmodifiableListView(monthlyAmounts);
+  }
+
   MapEntry<DateTime, GroupedExpenses> _toGroupedExpensesMap(
     DateTime date,
     List<Expense> expenses,
-  ) => MapEntry(
-    date,
-    GroupedExpenses(date: date, expenses: UnmodifiableListView(expenses)),
-  );
+  ) {
+    expenses.sort(
+      (expenseA, expenseB) => expenseB.createdAt.compareTo(expenseA.createdAt),
+    );
+    return MapEntry(
+      date,
+      GroupedExpenses(date: date, expenses: UnmodifiableListView(expenses)),
+    );
+  }
 
   Map<DateTime, List<Expense>> _groupExpensesByDate(
     Map<DateTime, List<Expense>> current,
     Expense newExpense,
+  ) => _groupExpensesBy(
+    current,
+    newExpense,
+    (dateTime) => dateTime.dateWithoutTime,
+  );
+
+  Map<DateTime, List<Expense>> _groupExpensesByMonth(
+    Map<DateTime, List<Expense>> current,
+    Expense newExpense,
+  ) => _groupExpensesBy(current, newExpense, (dateTime) => dateTime.dateMonth);
+
+  Map<DateTime, List<Expense>> _groupExpensesBy(
+    Map<DateTime, List<Expense>> current,
+    Expense newExpense,
+    DateTime Function(DateTime datetime) groupBy,
   ) {
-    final date = newExpense.expenseDateTime.dateWithoutTime;
+    final date = groupBy(newExpense.expenseDateTime);
 
     if (current.containsKey(date)) {
       current[date] = [...current[date]!, newExpense];

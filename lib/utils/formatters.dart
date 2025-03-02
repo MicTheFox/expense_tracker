@@ -11,4 +11,5 @@ class Formatters {
       );
 
   static DateFormat get dateFormatter => DateFormat.yMMMd();
+  static DateFormat get monthFormatter => DateFormat.yMMM();
 }

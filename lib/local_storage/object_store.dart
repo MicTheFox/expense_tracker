@@ -9,7 +9,15 @@ class ObjectStore {
   ObjectStore._create(this.store);
 
   /// Create an instance of ObjectBox to use throughout the app.
-  static Future<ObjectStore> create() async {
+  static Future<ObjectStore> create({bool isInMemory = false}) async {
+    if (isInMemory) {
+      final store = Store(
+        getObjectBoxModel(),
+        directory: "memory:expense-tracker",
+      );
+      return ObjectStore._create(store);
+    }
+
     final docsDir = await getApplicationDocumentsDirectory();
     final store = await openStore(
       directory: p.join(docsDir.path, "com.example.expense-tracker"),

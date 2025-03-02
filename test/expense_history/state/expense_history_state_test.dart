@@ -50,4 +50,18 @@ void main() {
 
     expect(groupedExpenses.totalAmount, 42.42 + 22.42);
   });
+
+  test('monthlyAmountsOfLastYear is calculated correctly', () async {
+    final state = ExpenseHistoryLoaded(
+      expenses: UnmodifiableListView(expenses),
+    );
+
+    expect(
+      state.monthlyAmountsOfLastYear,
+      UnmodifiableListView([
+        (DateTime(2025, 2), 64.84),
+        (DateTime(2025, 3), 44.84),
+      ]),
+    );
+  });
 }

@@ -4,6 +4,9 @@ const addExpensePageAddedKey = Key('addExpensePageAdded');
 const addExpensePageErrorKey = Key('addExpensePageError');
 
 const addExpenseFormAmountTextFieldKey = Key('addExpenseFormAmountTextField');
+const addExpenseFormDateTimeTextFieldKey = Key(
+  'addExpenseFormDateTimeTextField',
+);
 const addExpenseFormSubmitButtonKey = Key('addExpenseFormSubmitButton');
 
 const navigationHistoryKey = Key('navigationHistory');

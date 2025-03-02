@@ -1,8 +1,7 @@
-import 'dart:collection';
-
 import 'package:expense_tracker/expense/data_models/expense.dart';
 import 'package:expense_tracker/expense_history/state/expense_history_cubit.dart';
 import 'package:expense_tracker/expense_history/state/expense_history_state.dart';
+import 'package:expense_tracker/expense_history/widgets/monthly_statistics.dart';
 import 'package:expense_tracker/utils/category_extension.dart';
 import 'package:expense_tracker/utils/formatters.dart';
 import 'package:expense_tracker/utils/keys.dart';
@@ -20,10 +19,7 @@ class ExpenseHistoryPage extends StatelessWidget {
             ExpenseHistoryUnloaded() => const Center(
               child: CircularProgressIndicator(),
             ),
-            ExpenseHistoryLoaded() => _Loaded(
-              filter: state.categoryFilter,
-              groupedExpenses: state.groupedExpenses,
-            ),
+            ExpenseHistoryLoaded() => _Loaded(state: state),
             ExpenseHistoryError() => const Center(
               child: Text('An error occured.'),
             ),
@@ -33,13 +29,12 @@ class ExpenseHistoryPage extends StatelessWidget {
 }
 
 class _Loaded extends StatelessWidget {
-  final Category? filter;
-  final UnmodifiableListView<GroupedExpenses> groupedExpenses;
-  const _Loaded({required this.groupedExpenses, required this.filter});
+  final ExpenseHistoryLoaded state;
+  const _Loaded({required this.state});
 
   @override
   Widget build(BuildContext context) {
-    if (groupedExpenses.isEmpty) {
+    if (state.groupedExpenses.isEmpty) {
       return const Center(
         child: Text(
           'Your expenses will show up here after you added your first expense.',
@@ -52,19 +47,25 @@ class _Loaded extends StatelessWidget {
         SliverAppBar(
           actions: [
             DropdownButton<Category?>(
+              padding: const EdgeInsets.only(bottom: 6),
               items: [
                 ...CategoryExtension.dropdownItems,
                 const DropdownMenuItem(child: Text('All categories')),
               ],
               hint: const Text('Category filter'),
-              value: filter,
+              value: state.categoryFilter,
               onChanged: (category) {
                 context.read<ExpenseHistoryCubit>().filter(category);
               },
             ),
           ],
         ),
-        for (final group in groupedExpenses) ...[
+        SliverToBoxAdapter(
+          child: MonthlyStatistics(
+            monthlyAmountsOfLastYear: state.monthlyAmountsOfLastYear,
+          ),
+        ),
+        for (final group in state.groupedExpenses) ...[
           SliverToBoxAdapter(
             child: _DateHeadline(
               date: group.date,

@@ -44,7 +44,13 @@ void main() {
 
     await tester.pumpWidget(widget);
 
-    expect(find.byKey(expenseHistoryPageHeadlineKey), findsNWidgets(3));
-    expect(find.byKey(expenseHistoryPageListTileKey), findsNWidgets(4));
+    expect(
+      find.byKey(expenseHistoryPageHeadlineKey, skipOffstage: false),
+      findsNWidgets(3),
+    );
+    expect(
+      find.byKey(expenseHistoryPageListTileKey, skipOffstage: false),
+      findsNWidgets(4),
+    );
   });
 }

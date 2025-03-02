@@ -56,6 +56,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
               Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: InputDatePickerFormField(
+                  key: addExpenseFormDateTimeTextFieldKey,
                   initialDate: _expenseDateTime,
                   firstDate: now.subtract(const Duration(days: 365)),
                   lastDate: now,
