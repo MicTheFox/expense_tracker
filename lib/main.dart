@@ -7,6 +7,8 @@ import 'expense/data_models/expense.dart';
 import 'local_storage/object_store.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   final localStorage = await ObjectStore.create();
   final expenseRepository = LocalExpenseRepository(
     db: localStorage.store.box<Expense>(),
