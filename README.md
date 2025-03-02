@@ -33,3 +33,7 @@ The `Expense` data model that is stored with `objectbox` is generated with `buil
 - Mocks for Unit and Widget tests are created with `mocktail`.
 - Bloc tests are created with `bloc_test`.
 - Integration tests are run with plain `integration_test` package.
+
+#### Running tests
+- Unit/Widget tests: run `flutter test`
+- Integration tests: Open a simulator or emulator and run `flutter test integration_test`
