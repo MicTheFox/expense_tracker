@@ -35,6 +35,18 @@ void main() {
     );
   });
 
+  testWidgets('shows is empty message if there are no expenses', (
+    WidgetTester tester,
+  ) async {
+    when(
+      () => mockExpenseHistoryCubit.state,
+    ).thenReturn(ExpenseHistoryLoaded(expenses: UnmodifiableListView([])));
+
+    await tester.pumpWidget(widget);
+
+    expect(find.byKey(expenseHistoryPageEmptyKey), findsOneWidget);
+  });
+
   testWidgets('displays correct number of headline and list tiles', (
     WidgetTester tester,
   ) async {

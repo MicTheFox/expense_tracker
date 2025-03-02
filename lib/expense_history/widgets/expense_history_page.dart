@@ -34,8 +34,9 @@ class _Loaded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state.groupedExpenses.isEmpty) {
+    if (state.expenses.isEmpty) {
       return const Center(
+        key: expenseHistoryPageEmptyKey,
         child: Text(
           'Your expenses will show up here after you added your first expense.',
         ),

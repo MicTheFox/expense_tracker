@@ -11,5 +11,6 @@ const addExpenseFormSubmitButtonKey = Key('addExpenseFormSubmitButton');
 
 const navigationHistoryKey = Key('navigationHistory');
 
+const expenseHistoryPageEmptyKey = Key('expenseHistoryEmptyTile');
 const expenseHistoryPageHeadlineKey = Key('expenseHistoryHeadlineTile');
 const expenseHistoryPageListTileKey = Key('expenseHistoryPageListTile');
